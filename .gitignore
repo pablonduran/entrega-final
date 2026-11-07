@@ -1,0 +1,37 @@
+# Entornos virtuales
+.venv/
+env/
+venv/
+ENV/
+
+# Python cache
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+
+# Variables de entorno sensibles
+.env
+.env.local
+*.pem
+*.key
+
+# Bases de datos y almacenamiento temporal
+*.db
+*.sqlite3
+checkpoints.db
+vectorstore/
+chroma_db/
+traza_ejecucion.json
+
+# Logs y pruebas
+*.log
+.pytest_cache/
+.coverage
+htmlcov/
+
+# IDEs y editores
+.vscode/
+.idea/
+*.swp
+*.swo

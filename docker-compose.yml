@@ -1,0 +1,44 @@
+version: "3.8"
+
+services:
+  redis:
+    image: redis:alpine
+    container_name: redis-intelligence
+    restart: unless-stopped
+    ports:
+      - "6379:6379"
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 5
+
+  phoenix:
+    image: arizephoenix/phoenix:latest
+    container_name: phoenix-intelligence
+    restart: unless-stopped
+    ports:
+      - "6006:6006"
+      - "4317:4317"
+
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: app-intelligence
+    restart: unless-stopped
+    ports:
+      - "8000:8000"
+    env_file:
+      - .env
+    environment:
+      - REDIS_URL=redis://redis:6379
+      - PHOENIX_COLLECTOR_ENDPOINT=http://phoenix:6006/v1/traces
+      - PHOENIX_PROJECT_NAME=sistema-intelligence-produccion
+      - API_HOST=0.0.0.0
+      - API_PORT=8000
+    depends_on:
+      redis:
+        condition: service_healthy
+      phoenix:
+        condition: service_started
